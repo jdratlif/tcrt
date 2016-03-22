@@ -1,46 +1,61 @@
-.aspect .name {
-    overflow: hidden;
+.aspect > .name {
 	font-size:small;
-	line-height: 1.4em;
 }
 
-.aspect img {
-    float: left;
-    margin-top: 8px;
-    margin-right: 5px;
-    width: 32px;
-    height: 32px;
-}
-
-#aspects > div {
-    float: left;
-}
-
-#aspects h2 {
-    text-align: center;
-}
-
-.aspectList {
-    list-style: none;
-    width: 700px;
-}
-
-.aspectList > li {
-    width: 20%;
-    float: left;
-}
-
-.aspectList > li > * {
-    padding: 5px;
+.aspect > div {
     overflow: hidden;
 }
 
-.aspectList > li.aspect:hover {
+.aspect > img {
+    float: left;
+    margin: 5px 0;
+}
+
+#aspectControl {
+    overflow: auto;
+}
+
+#aspectControl h2 {
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+#aspectControl > section {
+    float: left;
+    margin: 0 5px;
+}
+
+.aspectControlList {
+    list-style: none;
+    border: 1px solid black;
+    padding: 5px;
+    margin-top: 0;
+    float: left;
+}
+
+.aspectControlList > li {
+    float: left;
+}
+
+.aspectControlList > li > * {
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#aspectList {
+    width: 750px;
+}
+
+#aspectList > li {
+    width: 20%;
+}
+
+#aspectList > li.aspect:hover {
     background: #DDDDDD;
     font-weight: bold;
 }
 
-.centered {
+#aspectList > p {
     text-align: center;
 }
 
@@ -66,88 +81,94 @@
 	margin-left: 37px;
 }
 
+.connectionList {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 10px;
+}
+
+.connectionList > li {
+    text-align: left;
+}
+
+.connectionList > li > * {
+    padding: 5px;
+}
+
 .fieldName {
     float: left;
     width: 15%;
-    padding: 5px 0;
+    margin-right: 10px;
 }
 
 #finder {
-    clear: left;
-    padding-top: 20px;
     width: 650px;
+    margin-bottom: 25px;
 }
 
-#finder > * {
-    margin-top: 10px;
+#finder > div {
+    margin-bottom: 10px;
 }
 
-.operator {
-	font-size: 1.2em;
-	line-height: 30px;
-	margin-right: 0 6px;
-}
-
-.pathList {
-    float: left;
-    width: 50%;
-}
-
-.pathList > h2 {
+footer {
     text-align: center;
 }
 
-.pointList {
-    list-style: none;
-    width: 280px;
-    max-height: 355px;
-    overflow:scroll;
+footer > hr {
+    width: 75%;
 }
 
-.pointList > li {
-    width: 50%;
-    float: left;
+#longArrow {
+    font-family: monospaced;
 }
 
-.pointList > li > * {
-    padding: 5px;
-    text-align: middle;
-    vertical-align: middle;
-    overflow: hidden;
-}
-
-#resetPoints {
-    display: block;
-    float: clear;
-}
-
-.pointControl > div {
+#pointControl > div {
     margin-bottom: 5px;
-    overflow: hidden;
 }
 
-.pointControl button {
-    margin-left: 5px;
+#pointControl button {
+    width: 60px;
+}
+
+#pointList {
+    width: 275px;
+    max-height: 378px;
+    overflow: auto;
+}
+
+#pointList > li {
+    width: 50%;
+    text-align: center;
 }
 
 .resultList {
-    list-style: none;
-    padding: 0;
+    overflow: auto;
+    text-align: center;
 }
 
-.resultList > li {
-    width: 165px;
-    padding: 5px;
+.resultList > div {
+    margin-top: 5px;
+}
+
+.resultList button {
+    margin: 0 5px;
+}
+
+.resultList p {
+    margin: 5px;
+}
+
+.resultList > section {
+    float: left;
+    width: 50%;
 }
 
 .resultListAspect {
-     border: 1px solid #E8E8E8;
-     padding: 0;
-     font-size: 1.0em;
+    border: 1px solid #E8E8E8;;
 }
 
 .select2-container .select2-choice {
-    height: 44px;
+    height: 45px;
 }
 
 .spinner {

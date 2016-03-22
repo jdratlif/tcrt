@@ -1,5 +1,11 @@
 Changelog
 
+Version 0.83 -
+    - removed scroll bars on points when not needed
+    - various UI tweaks
+    - added Next/Previous buttons to replace cycle button for paths
+    - added borders around points and aspect controls
+
 Version 0.82 - Monday, March 21, 2016
     - fixed line wrapping on instrumentum in the connection dialog
     - added save/load slots for aspect points

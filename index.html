@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
 <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="select2.css">
     <script src="select2.min.js"></script>
-    <script src="buckets.min.js"></script>
     
     <!-- stylesheets and javascript links -->
     <link rel="stylesheet" href="tcrt.css" />
@@ -22,21 +21,15 @@
 <body>
 <h1>Thaumcraft 5 Research Tool v<span id="version"></span></h1>
 
-<!-- compound aspect component box overlay -->
-<div id="componentBox">
-    <div class="aspect" id="aspect1"></div>
-    <span class="operator">+</span>
-    <div class="aspect" id="aspect2"></div>
-</div>
-
 <!-- asepct points and list -->
-<div id="aspects">
+<div id="aspectControl">
+
     <!-- available research points -->
-    <div>
-        <h2>Remaining Points</h2>
-        <ul id="pointList" class="pointList"></ul>
-        <div class="pointControl">
-            <div class="fieldName">Slot: </div>
+    <section>
+        <h2>Points</h2>
+        <ul id="pointList" class="aspectControlList"></ul>
+        <div id="pointControl">
+            <label for="slotSpinner" class="fieldName">Slot:</label>
             
             <div>
                 <input id="slotSpinner" class="spinner" value="1" />
@@ -44,33 +37,32 @@
                 <button id="saveSlotButton">Save</button>
             </div>
             
-            <div class="fieldName">Points: </div>
+            <label for="resetPointsSpinner" class="fieldName">Points:</label>
             
             <div>
                 <input id="resetPointsSpinner" class="spinner" value="5" />
                 <button id="resetPointsButton">Reset</button>
             </div>
         </div>
-    </div>
+    </section>
     
     <!-- available aspects -->
-    <div>
-        <h2>Available Aspects</h2>
-        <ul id="aspectList" class="aspectList"></ul>
-    </div>
+    <section>
+        <h2>Aspects</h2>
+        <ul id="aspectList" class="aspectControlList"></ul>
+    </section>
 </div>
 
 <!-- the connection finder -->
 <div id="finder">
-    <div class="fieldName">Connect: </div>
+    <label for="fromSelect" class="fieldName">Connect:</label>
     <div>
         <input type="hidden" id="fromSelect" />
-        &mdash;&xrarr;
+        &xrarr;
         <input type="hidden" id="toSelect" />
     </div>
     
-    <div class="fieldName">Min Step(s):</div>
-    
+    <label for="stepsSpinner" class="fieldName">Min Step(s):</label>
     <div>
         <input id="stepsSpinner" class="spinner" value="1" />
     </div>
@@ -81,27 +73,42 @@
     </div>
 </div>
 
-<hr style="text-align: center; width: 75%;" />
+<!-- compound aspect component box overlay -->
+<div id="componentBox">
+    <div class="aspect" id="aspect1"></div>
+    <span class="operator">+</span>
+    <div class="aspect" id="aspect2"></div>
+</div>
 
 <!-- copyright and other information -->
 <footer>
+    <hr />
+    
     <p>
-        Copyright &copy; 2016 John Ratliff 
-        <small>(john [AT] technoplaza [DOT] net)</small><br/>
+        Copyright &copy; 2016 John Ratliff
+        <small>(john [AT] technoplaza [DOT] net)</small>
+        <br />
         This work is licensed under a
-        <a rel="license"
-           href="http://creativecommons.org/licenses/by/4.0/">Creative
-        Commons Attribution 4.0 International License
-        </a>.<br/>
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        Creative Commons Attribution 4.0 International License.</a>
+        <br />
+        The source is available on 
+        <a href="https://github.com/jdratlif/tcrt">github</a>.
+    </p>
+    
+    <p>
         Code has been liberally borrowed from
         <a href="http://ythri.github.io/tcresearch/">ythri's Thaumcraft Research
         Helper</a>.
     </p>
-    
-    <p>
-        <small>This tool has been tested with Google Chrome. Let me know if it
-        doesn&apos;t work elsewhere.</small>
-    </p>
+        
+        <p>
+            <small>This tool has been tested mostly using Google Chrome, but it
+            should work in any modern browser (e.g. IE11+, Safari, Firefox, et.
+            al.) Please let me know if you notice any problems.</small>
+        </p>
+        
+        <hr />
 </footer>
 
 </body>

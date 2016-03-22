@@ -112,7 +112,7 @@ var translate = {
 };
 
 // version of the tool
-var version = 0.82;
+var version = 0.83;
 
 /*******************************************************************************
  * Functions
@@ -234,42 +234,42 @@ function connect(from, to, steps) {
         var paths = [];
         var visited = {};
         
-        while (!queue.isEmpty()) {
-            // take the most promising path
-            var element = queue.dequeue();
-            
-            // get the length of this path
+        // continue path evaluation until queue is empty
+        while (queue.length > 0) {
+            var element = queue.shift();
             var pathLength = element.path.length - 1;
-
-            // get the last aspect in the path
             var node = element.path[pathLength];
             
+            // build the path name
             var pathName = "";
             for (i = 0; i <= pathLength; i++) {
                 pathName += element.path[i];
             }
             
+            // ensure we have a path array for this length
             if (!(pathLength in visited)) {
                 visited[pathLength] = [];
             }
             
+            // if we haven't travele this path before
             if (visited[pathLength].indexOf(pathName) == -1) {
                 visited[pathLength].push(pathName);
                 
-                if ((paths.length > 0) && (pathLength > (paths[0].path.length - 2))) {
-                    // stop if path is longer than paths already found
+                // stop if path is longer than paths already found
+                if ( (paths.length > 0) && 
+                     (pathLength > (paths[0].path.length - 2)) ) {
                     continue;
                 }
                 
                 // for every aspect we can link with
                 graph[node].forEach(function(aspect) {
-                    // assume the path is valid until we validate it
                     var goodPath = true;
                     
                     // clone the current paths
                     var newPath = element.path.slice();
                     var newFullPath = element.fullPath.slice();
                     
+                    // stop if we have reached a valid path
                     if ((aspect == to) && (pathLength >= steps)) {
                         element.path.push(aspect);
                         paths.push(element);
@@ -302,12 +302,11 @@ function connect(from, to, steps) {
                         }
                     }
                     
+                    // if our path is traversable, add it to the queue
                     if (goodPath) {
-                        // add this new element to the path
                         newPath.push(aspect);
                         
-                        // add this path to the queue to be checked
-                        queue.enqueue({
+                        queue.push({
                             path: newPath,
                             fullPath: newFullPath,
                             points: newPoints
@@ -321,15 +320,11 @@ function connect(from, to, steps) {
     }
     
     var tempPoints = $.extend({}, points);
-    var queue = new buckets.PriorityQueue(function(a, b) {
-        return (b.path.length - a.path.length);
-    });
-
-    queue.enqueue({
+    var queue = [{
         path: [from],
         fullPath: [],
         points: tempPoints
-    });
+    }];
     
     return search(queue, to);
 }
@@ -412,14 +407,14 @@ function showResult(connection) {
     var matchId = connection.matchId;
     var path = connection.paths[index].path;
     var connectionId = connection.connectionId;
-    var needed = connection.paths[index].fullPath;
-    var neededId = connection.neededId;
+    var required = connection.paths[index].fullPath;
+    var requiredId = connection.requiredId;
     
     $("#" + matchId).html("Showing match " + (index + 1) + " of " +
         connection.paths.length + ".");
     
     $("#" + connectionId).empty();
-    $("#" + neededId).empty();
+    $("#" + requiredId).empty();
     
     for (i = 0; i < path.length; i++) {
         if (i > 0) {
@@ -432,15 +427,15 @@ function showResult(connection) {
             '<div class="name">' + path[i] + '</div></li>');
     }
     
-    for (i = 0; i < needed.length; i++) {
+    for (i = 0; i < required.length; i++) {
         if (i > 0) {
-            $("#" + neededId).append('<li style="text-align: center;">&darr;</li>');
+            $("#" + requiredId).append('<li style="text-align: center;">&darr;</li>');
         }
         
-        $("#" + neededId).append('<li class="resultListAspect aspect" data-id="' + needed[i] + '">' +
-            '<img src="images/aspects/' + translate[needed[i]] + '.png">' + 
-            '<div>' + translate[needed[i]] + '</div>' + 
-            '<div class="name">' + needed[i] + '</div></li>');
+        $("#" + requiredId).append('<li class="resultListAspect aspect" data-id="' + required[i] + '">' +
+            '<img src="images/aspects/' + translate[required[i]] + '.png">' + 
+            '<div>' + translate[required[i]] + '</div>' + 
+            '<div class="name">' + required[i] + '</div></li>');
     }
 }
 
@@ -459,7 +454,7 @@ initializeGraph();
 console.dir(graph);
 
 // setup hover events for displaying components of compound aspects
-$("body").on("mouseenter", ".aspectList .aspect", function() {
+$("body").on("mouseenter", ".aspect", function() {
     var aspect = $(this).data("id");
     
     if (!isPrimal(aspect)) {
@@ -484,7 +479,7 @@ $("body").on("mouseenter", ".aspectList .aspect", function() {
     }
 });
 
-$("body").on("mouseleave", ".aspectList .aspect", function() {
+$("body").on("mouseleave", ".aspect", function() {
     $("#componentBox").hide();
 });
 
@@ -575,12 +570,13 @@ $("#connectButton").click(function() {
     
     var dialogName = from + "_" + to;
     
-    var connectionId= dialogName + "_connection";
-    var neededId = dialogName + "_needed";
+    var connectionId = dialogName + "_connection";
+    var requiredId = dialogName + "_required";
     var matchId = dialogName + "_match";
     
-    var cycleId = dialogName + "_cycle";
-    var chooseId = dialogName + "_choose";
+    var nextButtonId = dialogName + "_nextButton";
+    var previousButtonId = dialogName + "_previousButton";
+    var acceptButtonId = dialogName + "_acceptButton";
     
     var paths = connect(from, to, steps);
     
@@ -599,7 +595,7 @@ $("#connectButton").click(function() {
         paths: paths, 
         index: 0,
         connectionId: connectionId,
-        neededId: neededId,
+        requiredId: requiredId,
         matchId: matchId
     };
     
@@ -607,7 +603,7 @@ $("#connectButton").click(function() {
     
     $("#" + dialogName).remove();
     
-    $("body").append('<div class="aspectList" id="' + dialogName + '" title="' + title + '"></div>');
+    $("body").append('<div id="' + dialogName + '" title="' + title + '"></div>');
     $("#" + dialogName).dialog({
         autoOpen: false,
         modal: false,
@@ -615,19 +611,20 @@ $("#connectButton").click(function() {
         width: 400
     });
     
-    $("#" + dialogName).append('<div class="pathList"><h2>Path</h2>' + 
-        '<ul class="resultList" id="' + connectionId + '"></ul></div>' +
-        '<div class="pathList"><h2>Needed</h2>' +
-        '<ul class="resultList" id="' + neededId + '"></ul></div>' +
-        '<div style="clear: left;"></div><hr />' +
-        '<p class="centered" id="' + matchId + '"></p>' +
-        '<div class="centered">' + 
-        '<button id="' + cycleId + '" style="margin-right: 10px">Cycle</button>' +
-        '<button id="' + chooseId + '">Choose</button></div>');
+    $("#" + dialogName).append('<div class="resultList">' +
+        '<section><h2>Path</h2>' + 
+        '<ul class="connectionList" id="' + connectionId + '"></ul></section>' +
+        '<section><h2>Required</h2>' + 
+        '<ul class="connectionList" id="' + requiredId + '"></ul></section>' +
+        '</div><hr /><div class="resultList">' +
+        '<p id="' + matchId + '"></p>' +
+        '<div><button id="' + nextButtonId + '">Next</button>' +
+        '<button id="' + previousButtonId + '">Previous</button></div>' +
+        '<div><button id="' + acceptButtonId + '">Accept</button></div></div>');
     
     showResult(connection);
     
-    $("#" + cycleId).click(function() {
+    $("#" + nextButtonId).click(function() {
         var index = connection.index + 1;
         
         if (index == connection.paths.length) {
@@ -639,7 +636,19 @@ $("#connectButton").click(function() {
         showResult(connection);
     });
     
-    $("#" + chooseId).click(function() {
+    $("#" + previousButtonId).click(function() {
+        var index = connection.index - 1;
+        
+        if (index < 0) {
+            index = connection.paths.length - 1;
+        }
+        
+        connection.index = index;
+        
+        showResult(connection);
+    });
+    
+    $("#" + acceptButtonId).click(function() {
         $("#" + dialogName).remove();
         initializeAspectPoints(connection.paths[connection.index].points);
     });
