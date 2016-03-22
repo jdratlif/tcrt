@@ -1,0 +1,155 @@
+.aspect .name {
+    overflow: hidden;
+	font-size:small;
+	line-height: 1.4em;
+}
+
+.aspect img {
+    float: left;
+    margin-top: 8px;
+    margin-right: 5px;
+    width: 32px;
+    height: 32px;
+}
+
+#aspects > div {
+    float: left;
+}
+
+#aspects h2 {
+    text-align: center;
+}
+
+.aspectList {
+    list-style: none;
+    width: 700px;
+}
+
+.aspectList > li {
+    width: 20%;
+    float: left;
+}
+
+.aspectList > li > * {
+    padding: 5px;
+    overflow: hidden;
+}
+
+.aspectList > li.aspect:hover {
+    background: #DDDDDD;
+    font-weight: bold;
+}
+
+.centered {
+    text-align: center;
+}
+
+#componentBox {
+    z-index: 500;
+    background: #D6D6D6;
+    position: absolute;
+    padding: 5px;
+	display: none;
+}
+
+#componentBox > .aspect {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#componentBox > .aspect > img {
+	float: left;
+	margin: 4px 5px 0 0;
+}
+
+#componentBox > .aspect > div {
+	margin-left: 37px;
+}
+
+.fieldName {
+    float: left;
+    width: 15%;
+    padding: 5px 0;
+}
+
+#finder {
+    clear: left;
+    padding-top: 20px;
+    width: 650px;
+}
+
+#finder > * {
+    margin-top: 10px;
+}
+
+.operator {
+	font-size: 1.2em;
+	line-height: 30px;
+	margin-right: 0 6px;
+}
+
+.pathList {
+    float: left;
+    width: 50%;
+}
+
+.pathList > h2 {
+    text-align: center;
+}
+
+.pointList {
+    list-style: none;
+    width: 280px;
+    max-height: 355px;
+    overflow:scroll;
+}
+
+.pointList > li {
+    width: 50%;
+    float: left;
+}
+
+.pointList > li > * {
+    padding: 5px;
+    text-align: middle;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+#resetPoints {
+    display: block;
+    float: clear;
+}
+
+.pointControl > div {
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.pointControl button {
+    margin-left: 5px;
+}
+
+.resultList {
+    list-style: none;
+    padding: 0;
+}
+
+.resultList > li {
+    width: 165px;
+    padding: 5px;
+}
+
+.resultListAspect {
+     border: 1px solid #E8E8E8;
+     padding: 0;
+     font-size: 1.0em;
+}
+
+.select2-container .select2-choice {
+    height: 44px;
+}
+
+.spinner {
+    width: 50px;
+}

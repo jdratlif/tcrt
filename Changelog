@@ -1,0 +1,17 @@
+Changelog
+
+Version 0.82 - Monday, March 21, 2016
+    - fixed line wrapping on instrumentum in the connection dialog
+    - added save/load slots for aspect points
+    - various UI tweaks
+    - fixed connect algorithm bug where it didn't find certain connections
+
+Version 0.81 - Sunday, March 20, 2016
+    - added titles to the aspect lists
+    - added spinner for reset button to reset to a different starting count
+    - added component aspect combination hovering
+    - added match count information
+    - fixed bug where paths were double if to/from were the same
+
+Version 0.80 - Saturday, March 19, 2016
+    - Initial Public Release
