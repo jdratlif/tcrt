@@ -1,6 +1,13 @@
 Changelog
 
-Version 0.83 -
+Version 0.84 -
+    - fixed bug that caused exception when hovering over to/from selectors
+    - fixed some HTML validation issues.
+    - moved all callback handlers to external functions
+    - added noscript handler for JavaScript that disables application display
+    - added how to information
+
+Version 0.83 - Tuesday, March 22, 2016
     - removed scroll bars on points when not needed
     - various UI tweaks
     - added Next/Previous buttons to replace cycle button for paths

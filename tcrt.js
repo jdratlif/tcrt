@@ -112,7 +112,7 @@ var translate = {
 };
 
 // version of the tool
-var version = 0.83;
+var version = 0.84;
 
 /*******************************************************************************
  * Functions
@@ -123,14 +123,18 @@ function addResearchPoint(aspect, count) {
     if (aspect in points) {
         points[aspect] += count;
         if (points[aspect] < 0) points[aspect] = 0;
+        
+        var code = $("#" + aspect).html();
+        console.log(code);
+        
         $("#" + aspect).html(points[aspect]);
     } else {
         points[aspect] = count;
 
         $("#pointList").append('<li id="' + aspect + 'point" data-id="' +
             aspect + '"><img src="images/aspects/' + translate[aspect] +
-            '.png"><span id="' + aspect + '">' + points[aspect] +
-            '</span></li>');
+            '.png" alt="' + translate[aspect] + '" /><span id="' + aspect + 
+            '">' + points[aspect] + '</span></li>');
 
         $("#" + aspect + "point").click(function(event) {
             var count = -1;
@@ -332,10 +336,10 @@ function connect(from, to, steps) {
 // formats the data items in the to/from selectors
 function format(item) {
     var aspect = item.id;
-
-    return '<div class="aspect" id="' + aspect +
-        '"><img style="margin: 4px 5px 0 0" src="images/aspects/' +
-        translate[aspect] + '.png" /><div>' +
+        
+    return '<div class="aspect">' + 
+        '<img style="margin: 4px 5px 0 0" src="images/aspects/' +
+        translate[aspect] + '.png" alt="' + translate[aspect] + '" /><div>' +
         translate[aspect] + '</div><div class="name">' +
         aspect + '</div></div>';
 }
@@ -350,6 +354,7 @@ function initializeAspectPoints(newPoints) {
     });
 }
 
+// builds the aspect connection graph
 function initializeGraph() {
     graph = {};
 
@@ -373,150 +378,8 @@ function isPrimal(aspect) {
     return (primals.indexOf(aspect) != -1);
 }
 
-// handler for the load slot button
-function onClickLoadSlotButton() {
-    var slot = $("#slotSpinner").spinner("value");
-    
-    if (slot in savedPoints) {
-        initializeAspectPoints(savedPoints[slot]);
-    }
-}
-
-// handler for the reset points button
-function onClickResetPointsButton() {
-    var newPoints = {};
-    var count = $("#resetPointsSpinner").spinner("value");
-    
-    primals.forEach(function (value) {
-        newPoints[value] = count;
-    });
-        
-    initializeAspectPoints(newPoints);
-}
-
-// handler for the save slot button
-function onClickSaveSlotButton() {
-    var slot = $("#slotSpinner").spinner("value");
-    
-    savedPoints[slot] = $.extend({}, points);
-}
-
-// shows the result of a connection
-function showResult(connection) {
-    var index = connection.index;
-    var matchId = connection.matchId;
-    var path = connection.paths[index].path;
-    var connectionId = connection.connectionId;
-    var required = connection.paths[index].fullPath;
-    var requiredId = connection.requiredId;
-    
-    $("#" + matchId).html("Showing match " + (index + 1) + " of " +
-        connection.paths.length + ".");
-    
-    $("#" + connectionId).empty();
-    $("#" + requiredId).empty();
-    
-    for (i = 0; i < path.length; i++) {
-        if (i > 0) {
-            $("#" + connectionId).append('<li style="text-align: center;">&darr;</li>');
-        }
-        
-        $("#" + connectionId).append('<li class="resultListAspect aspect" data-id="' + path[i] + '">' +
-            '<img src="images/aspects/' + translate[path[i]] + '.png">' + 
-            '<div>' + translate[path[i]] + '</div>' + 
-            '<div class="name">' + path[i] + '</div></li>');
-    }
-    
-    for (i = 0; i < required.length; i++) {
-        if (i > 0) {
-            $("#" + requiredId).append('<li style="text-align: center;">&darr;</li>');
-        }
-        
-        $("#" + requiredId).append('<li class="resultListAspect aspect" data-id="' + required[i] + '">' +
-            '<img src="images/aspects/' + translate[required[i]] + '.png">' + 
-            '<div>' + translate[required[i]] + '</div>' + 
-            '<div class="name">' + required[i] + '</div></li>');
-    }
-}
-
-/*******************************************************************************
- * Start of program
- ******************************************************************************/
- 
-$("#version").html(version);
-
-// setup the starting aspect points
-initializeAspectPoints(savedPoints[1]);
-
-// setup aspect link graph
-initializeGraph();
-
-console.dir(graph);
-
-// setup hover events for displaying components of compound aspects
-$("body").on("mouseenter", ".aspect", function() {
-    var aspect = $(this).data("id");
-    
-    if (!isPrimal(aspect)) {
-        var components = compounds[aspect];
-        var elements = [$("#aspect1"), $("#aspect2")];
-        
-        for (i = 0; i < 2; i++) {
-            elements[i].html('<img src="images/aspects/' +
-                translate[components[i]] + '.png" />' +
-                '<div class="thaumcraftName">' + translate[components[i]] + '</div>' +
-                '<div class="name">' + components[i] + '</div>');
-        }
-        
-        $(this).mousemove(function(event) {
-            $("#componentBox").css({
-                left: event.pageX + 10,
-                top: event.pageY - 100}).show();
-        });
-        
-    } else {
-        $("#componentBox").hide();
-    }
-});
-
-$("body").on("mouseleave", ".aspect", function() {
-    $("#componentBox").hide();
-});
-
-// setup save slot spinner
-$("#slotSpinner").spinner({
-    min: 1,
-    max: 9
-});
-
-// setup save/load buttons click event handlers
-$("#loadSlotButton").click(onClickLoadSlotButton);
-$("#saveSlotButton").click(onClickSaveSlotButton);
-
-// setup reset aspect points spinner
-$("#resetPointsSpinner").spinner({
-    min: 1,
-    max: 9
-});
-
-// handler for reset aspect points button
-$("#resetPointsButton").click(onClickResetPointsButton);
-
-// setup the aspect list box and to/from select data
-$.each(translate, function(key, value) {
-    $("#aspectList").append('<li class="aspect" data-id="' + key + '">' +
-        '<img src="images/aspects/' + value + '.png" />' +
-        '<div class="thaumcraftName">' + value + '</div>' +
-        '<div class="name">' + key + '</div></li>');
-
-    aspectData.push({
-        text: key,
-        id: key
-    });
-});
-
-// handler for clicking on an aspect from the aspect list
-$(".aspect").click(function() {
+// handler to add or build an aspect point when clicked
+function onClickAspect() {
     var id = $(this).data("id");
 
     if (isPrimal(id)) {
@@ -533,35 +396,10 @@ $(".aspect").click(function() {
                 translate[id] + ".");
         }
     }
-});
+}
 
-// setup to/from selectors
-$("#fromSelect, #toSelect").select2({
-    data: aspectData,
-    formatResult: format,
-    formatSelection: format,
-    width: "200px",
-    allowClear: false,
-    sortResults: function(results, container, query) {
-        return results.sort(function(a, b) {
-            return translate[a.id].localeCompare(translate[b.id]);
-        });
-    },
-    matcher: function(search, text) {
-        return (text.toUpperCase().indexOf(search.toUpperCase()) >= 0) ||
-            (translate[text].toUpperCase().indexOf(search.toUpperCase()) >= 0);
-    }
-});
-$("#fromSelect, #toSelect").select2("val", "air");
-
-// setup steps spin box
-$("#stepsSpinner").spinner({
-    min: 1,
-    max: 10
-});
-
-// handler for the connect button
-$("#connectButton").click(function() {
+// handler to find a connection between the two selected aspects
+function onClickFindConnectionsButton() {
     var from = $("#fromSelect").select2("val");
     var to = $("#toSelect").select2("val");
     var steps = $("#stepsSpinner").spinner("value")
@@ -654,5 +492,206 @@ $("#connectButton").click(function() {
     });
 
     $("#" + dialogName).dialog("open");
+}
+
+// handler to load the current save slot
+function onClickLoadSlotButton() {
+    var slot = $("#slotSpinner").spinner("value");
+    
+    if (slot in savedPoints) {
+        initializeAspectPoints(savedPoints[slot]);
+    }
+}
+
+// handler to reset the available points
+function onClickResetPointsButton() {
+    var newPoints = {};
+    var count = $("#resetPointsSpinner").spinner("value");
+    
+    primals.forEach(function (value) {
+        newPoints[value] = count;
+    });
+        
+    initializeAspectPoints(newPoints);
+}
+
+// handler to save the available points in the current slot
+function onClickSaveSlotButton() {
+    var slot = $("#slotSpinner").spinner("value");
+    
+    savedPoints[slot] = $.extend({}, points);
+}
+
+// handler to hide the component box
+function onHideComponentBox() {
+    $("#componentBox").hide();
+}
+
+// handler to show the components box
+function onShowComponentBox() {
+    var aspect = $(this).data("id");
+    
+    if (!isPrimal(aspect)) {
+        var components = compounds[aspect];
+        var elements = [$("#aspect1"), $("#aspect2")];
+        
+        for (i = 0; i < 2; i++) {
+            elements[i].html('<img src="images/aspects/' +
+                translate[components[i]] + '.png" alt="' + 
+                translate[components[i]] + '" />' + 
+                '<div class="thaumcraftName">' + translate[components[i]] +
+                '</div>' + '<div class="name">' + components[i] + '</div>');
+        }
+        
+        $(this).mousemove(function(event) {
+            $("#componentBox").css({
+                left: event.pageX + 10,
+                top: event.pageY - 100}).show();
+        });
+        
+    } else {
+        $("#componentBox").hide();
+    }
+}
+
+// shows the result of a connection
+function showResult(connection) {
+    var index = connection.index;
+    var matchId = connection.matchId;
+    var path = connection.paths[index].path;
+    var connectionId = connection.connectionId;
+    var required = connection.paths[index].fullPath;
+    var requiredId = connection.requiredId;
+    
+    $("#" + matchId).html("Showing match " + (index + 1) + " of " +
+        connection.paths.length + ".");
+    
+    $("#" + connectionId).empty();
+    $("#" + requiredId).empty();
+    
+    for (i = 0; i < path.length; i++) {
+        if (i > 0) {
+            $("#" + connectionId).append(
+                '<li style="text-align: center;">&darr;</li>');
+        }
+        
+        $("#" + connectionId).append(
+            '<li class="resultListAspect aspect" data-id="' + path[i] + '">' +
+            '<img src="images/aspects/' + translate[path[i]] + '.png" alt="' + 
+            translate[path[i]] + '" />' + '<div>' + translate[path[i]] +
+            '</div>' + '<div class="name">' + path[i] + '</div></li>');
+    }
+    
+    for (i = 0; i < required.length; i++) {
+        if (i > 0) {
+            $("#" + requiredId).append(
+                '<li style="text-align: center;">&darr;</li>');
+        }
+        
+        $("#" + requiredId).append(
+            '<li class="resultListAspect aspect" data-id="' + required[i] + '">' +
+            '<img src="images/aspects/' + translate[required[i]] + 
+            '.png" alt="' + translate[required[i]] + '" />' + 
+            '<div>' + translate[required[i]] + '</div>' + 
+            '<div class="name">' + required[i] + '</div></li>');
+    }
+}
+
+/*******************************************************************************
+ * Start of program
+ ******************************************************************************/
+ 
+$("#version").html(version);
+
+////////////////////////////////////////////////////////////////////////////////
+// Setup necessary data structures
+////////////////////////////////////////////////////////////////////////////////
+
+// setup the starting aspect points
+initializeAspectPoints(savedPoints[1]);
+
+// setup aspect link graph
+initializeGraph();
+
+////////////////////////////////////////////////////////////////////////////////
+// Setup display elements
+////////////////////////////////////////////////////////////////////////////////
+
+// setup save slot spinner
+$("#slotSpinner").spinner({
+    min: 1,
+    max: 9
 });
+
+// setup reset aspect points spinner
+$("#resetPointsSpinner").spinner({
+    min: 1,
+    max: 9
+});
+
+// setup the aspect list box and to/from select data
+$.each(translate, function(key, value) {
+    $("#aspectList").append('<li class="aspect" data-id="' + key + '">' +
+        '<img src="images/aspects/' + value + '.png" alt="' + value + '" />' +
+        '<div class="thaumcraftName">' + value + '</div>' +
+        '<div class="name">' + key + '</div></li>');
+
+    aspectData.push({
+        text: key,
+        id: key
+    });
+});
+
+// setup to/from selectors
+$("#fromSelect, #toSelect").select2({
+    data: aspectData,
+    formatResult: format,
+    formatSelection: format,
+    width: "200px",
+    allowClear: false,
+    sortResults: function(results, container, query) {
+        return results.sort(function(a, b) {
+            return translate[a.id].localeCompare(translate[b.id]);
+        });
+    },
+    matcher: function(search, text) {
+        return (text.toUpperCase().indexOf(search.toUpperCase()) >= 0) ||
+            (translate[text].toUpperCase().indexOf(search.toUpperCase()) >= 0);
+    }
+});
+$("#fromSelect, #toSelect").select2("val", "air");
+
+// setup steps spin box
+$("#stepsSpinner").spinner({
+    min: 1,
+    max: 10
+});
+
+////////////////////////////////////////////////////////////////////////////////
+// Setup event handler callbacks
+////////////////////////////////////////////////////////////////////////////////
+
+// setup hover events for displaying components of compound aspects
+$("body").on("mouseenter", ".aspectControlList .aspect", onShowComponentBox);
+$("body").on("mouseenter", ".resultList .aspect", onShowComponentBox);
+$("body").on("mouseleave", ".aspect", onHideComponentBox);
+
+// setup save/load buttons click event handlers
+$("#loadSlotButton").click(onClickLoadSlotButton);
+$("#saveSlotButton").click(onClickSaveSlotButton);
+
+// handler for reset aspect points button
+$("#resetPointsButton").click(onClickResetPointsButton);
+
+// handler for clicking on an aspect from the aspect list
+$(".aspect").click(onClickAspect);
+
+// handler for the connect button
+$("#connectButton").click(onClickFindConnectionsButton);
+
+////////////////////////////////////////////////////////////////////////////////
+// Display application
+////////////////////////////////////////////////////////////////////////////////
+$("#aspectControl").show();
+$("#finder").show();
 });
