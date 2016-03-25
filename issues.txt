@@ -1,3 +1,1 @@
-- remove internal functions for callbacks
-- add help and changelog
 - test in alternate resolutions and on mobile devices

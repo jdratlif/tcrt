@@ -15,15 +15,17 @@
     <script src="tcrt.js"></script>
     
     <title>Thaumcraft 5 Research Tool</title>
-    <noscript>JavaScript must be enabled for this tool to work.</noscript>
 </head>
 
 <body>
 <h1>Thaumcraft 5 Research Tool v<span id="version"></span></h1>
 
+<noscript>
+    This application requires JavaScript to work.
+</noscript>
+
 <!-- asepct points and list -->
 <div id="aspectControl">
-
     <!-- available research points -->
     <section>
         <h2>Points</h2>
@@ -55,7 +57,7 @@
 
 <!-- the connection finder -->
 <div id="finder">
-    <label for="fromSelect" class="fieldName">Connect:</label>
+    <div class="fieldName">Connect:</div>
     <div>
         <input type="hidden" id="fromSelect" />
         &xrarr;
@@ -79,6 +81,60 @@
     <span class="operator">+</span>
     <div class="aspect" id="aspect2"></div>
 </div>
+
+<section id="helpSection">
+    <h3>How to Use This Tool</h3>
+    
+    <p>
+        This tools helps you solve Thaumcraft research notes by showing you how
+        to connect one aspect to another. Simply select two spects from the
+        drop down, select the minimum number of aspects between them, and click
+        the Find Connections button. It will show you all the ways you can build
+        a path between the two aspects.
+    </p>
+    
+    <p>
+        If there is more than one path, you can use the Next and Previous
+        buttons to move through the possibilities. The tool tries to prioritize
+        the path that consumes the fewest number of points, but that may not
+        always be the best option for a given note.
+    </p>
+    
+    <p>
+        The Accept button is used to accept a path. Accepting a path subtracts
+        all the points necessary to build that connection from your points list.
+        In this way, you can continue solving a research note with multiple
+        paths within the constraints of the points that would be available to
+        you.
+    </p>
+    
+    <p>
+        On the top left, you'll see your available aspect points. This will
+        limit your connection path to things you can build. You can add points
+        to this list by clicking on an aspect from the aspects list at the top
+        right. Selecting a primal aspect will add one point of that aspect to
+        your points list. Selecting a compound aspect will build that aspect
+        using the points in your points list. If you click an aspect in the
+        points list, it will break down that aspect. Primal aspects get removed,
+        and compound aspects get broken down into their components. You can also
+        shift click on a primal aspect in the points list to add a point of that
+        primal.
+    </p>
+    
+    <p>
+        The save slots allow you to store and load a points list. You can save
+        your current point list by clicking the Save button. To load those
+        points back, just click the load button. The slot gives you more than
+        one place to save a point list. This makes it easier to experiemnt with
+        paths and go back if you get stuck.
+    </p>
+    
+    <p>
+        You can reset your points list back to a given number of primal aspect
+        points using the Reset button. It will reset your points list to just
+        primal aspects with that number of points for each.
+    </p>
+</section>
 
 <!-- copyright and other information -->
 <footer>

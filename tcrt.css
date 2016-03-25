@@ -1,5 +1,5 @@
 .aspect > .name {
-	font-size:small;
+    font-size:small;
 }
 
 .aspect > div {
@@ -12,12 +12,13 @@
 }
 
 #aspectControl {
+    display: none;
     overflow: auto;
 }
 
 #aspectControl h2 {
-    text-align: center;
     margin: 0.5em 0;
+    text-align: center;
 }
 
 #aspectControl > section {
@@ -26,11 +27,11 @@
 }
 
 .aspectControlList {
-    list-style: none;
     border: 1px solid black;
-    padding: 5px;
-    margin-top: 0;
     float: left;
+    list-style: none;
+    margin-top: 0;
+    padding: 5px;
 }
 
 .aspectControlList > li {
@@ -60,11 +61,11 @@
 }
 
 #componentBox {
-    z-index: 500;
     background: #D6D6D6;
-    position: absolute;
+    display: none;
     padding: 5px;
-	display: none;
+    position: absolute;
+    z-index: 500;
 }
 
 #componentBox > .aspect {
@@ -73,18 +74,18 @@
 }
 
 #componentBox > .aspect > img {
-	float: left;
-	margin: 4px 5px 0 0;
+    float: left;
+    margin: 4px 5px 0 0;
 }
 
 #componentBox > .aspect > div {
-	margin-left: 37px;
+    margin-left: 37px;
 }
 
 .connectionList {
     list-style: none;
-    padding-left: 0;
     margin: 0 10px;
+    padding-left: 0;
 }
 
 .connectionList > li {
@@ -97,13 +98,13 @@
 
 .fieldName {
     float: left;
-    width: 15%;
     margin-right: 10px;
+    width: 15%;
 }
 
 #finder {
+    display: none;
     width: 650px;
-    margin-bottom: 25px;
 }
 
 #finder > div {
@@ -111,11 +112,32 @@
 }
 
 footer {
+    margin-top: 50px;
     text-align: center;
 }
 
 footer > hr {
     width: 75%;
+}
+
+#helpSection {
+    background: cornsilk;
+    border: 1px solid black;
+    padding: 0 10px;
+    width: 952px;
+}
+
+#helpSection > h3 {
+    margin: 0;
+    text-align: center;
+}
+
+#helpSection > p {
+    background: lightgray;
+}
+
+#helpSection > p:nth-child(odd) {
+    background: BurlyWood;
 }
 
 #longArrow {
@@ -131,14 +153,14 @@ footer > hr {
 }
 
 #pointList {
-    width: 275px;
     max-height: 378px;
     overflow: auto;
+    width: 275px;
 }
 
 #pointList > li {
-    width: 50%;
     text-align: center;
+    width: 50%;
 }
 
 .resultList {
